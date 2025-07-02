@@ -1,0 +1,1 @@
+npm install bcrypt bcryptjs cors dotenv express express-session jsonwebtoken mongoose multer nodemailer

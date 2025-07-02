@@ -1,0 +1,17 @@
+/* Style to ensure the input field appears above the map */
+.input-container {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    top: 10px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
