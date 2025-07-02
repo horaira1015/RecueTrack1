@@ -104,7 +104,7 @@ const ViewDonations = () => {
           <table style={{ width: "100%", borderCollapse: "collapse", borderRadius: "10px", overflow: "hidden" }}>
             <thead>
               <tr style={{ background: "#1E90FF", color: "black" }}>
-                {["#", "Name", "Email", "Amount (₹)", "Spent (₹)", "Balance (₹)", "Message", "Actions"].map((header) => (
+                {["#", "Name", "Email", "Amount (Taka)", "Spent (Taka)", "Balance (Taka)", "Message", "Actions"].map((header) => (
                   <th key={header} style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #333" }}>
                     {header}
                   </th>
@@ -118,15 +118,15 @@ const ViewDonations = () => {
                     <td style={{ padding: "12px", textAlign: "center" }}>{index + 1}</td>
                     <td style={{ padding: "12px", textAlign: "center" }}>{donation.name}</td>
                     <td style={{ padding: "12px", textAlign: "center" }}>{donation.email}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>₹{donation.amount}</td>
+                    <td style={{ padding: "12px", textAlign: "center" }}>Taka{donation.amount}</td>
                     <td style={{ padding: "12px", textAlign: "center" }}>
                       {donation.money_Spent_For.map((item, i) => (
                         <div key={i}>
-                          {item.For}: ₹{item.amount}
+                          {item.For}: Taka{item.amount}
                         </div>
                       ))}
                     </td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>₹{donation.balance_amount}</td>
+                    <td style={{ padding: "12px", textAlign: "center" }}>Taka{donation.balance_amount}</td>
                     <td style={{ padding: "12px", textAlign: "center" }}>{donation.message || "—"}</td>
                     <td>
                       {editingId === donation._id ? (

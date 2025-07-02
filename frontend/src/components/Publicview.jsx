@@ -34,7 +34,7 @@ const PublicView = () => {
           <table style={{ width: "100%", borderCollapse: "collapse", borderRadius: "10px", overflow: "hidden", background: "#FAFAFA" }}>
             <thead>
               <tr style={{ background: "#0056b3", color: "white" }}>
-                {["#", "Donor Name", "Donations (₹)", "Inventory Spent", "Fund Remaining (₹)"].map((header) => (
+                {["#", "Donor Name", "Donations (Taka)", "Inventory Spent", "Fund Remaining (Taka)"].map((header) => (
                   <th key={header} style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #ddd" }}>
                     {header}
                   </th>
@@ -48,13 +48,13 @@ const PublicView = () => {
         <tr key={donation._id} style={{ background: index % 2 === 0 ? "#E3F2FD" : "#F0F8FF" }}>
           <td style={{ padding: "12px", textAlign: "center" }}>{index + 1}</td>
           <td style={{ padding: "12px", textAlign: "center", fontWeight: "bold" }}>{donation.name}</td>
-          <td style={{ padding: "12px", textAlign: "center", color: "#008000", fontWeight: "bold" }}>₹{donation.amount}</td>
+          <td style={{ padding: "12px", textAlign: "center", color: "#008000", fontWeight: "bold" }}>Taka{donation.amount}</td>
           <td style={{ padding: "12px", textAlign: "center" }}>
             {donation.money_Spent_For.length > 0 ? (
               <ul style={{ padding: "0", margin: "0", listStyle: "none" }}>
                 {donation.money_Spent_For.map((item, i) => (
                   <li key={i} style={{ padding: "5px 0" }}>
-                    <strong>{item.For}:</strong> ₹{item.amount}
+                    <strong>{item.For}:</strong> Taka{item.amount}
                   </li>
                 ))}
               </ul>
@@ -62,7 +62,7 @@ const PublicView = () => {
               "—"
             )}
           </td>
-          <td style={{ padding: "12px", textAlign: "center", color: "#D32F2F", fontWeight: "bold" }}>₹{donation.balance_amount}</td>
+          <td style={{ padding: "12px", textAlign: "center", color: "#D32F2F", fontWeight: "bold" }}>Taka{donation.balance_amount}</td>
         </tr>
       ))}
       <tr style={{ background: "#C8E6C9" }}>
@@ -70,7 +70,7 @@ const PublicView = () => {
           Total Remaining Funds:
         </td>
         <td style={{ textAlign: "center", padding: "12px", color: "#2E7D32", fontWeight: "bold" }}>
-          ₹{donations.reduce((acc, curr) => acc + Number(curr.balance_amount || 0), 0)}
+          Taka{donations.reduce((acc, curr) => acc + Number(curr.balance_amount || 0), 0)}
         </td>
       </tr>
     </>

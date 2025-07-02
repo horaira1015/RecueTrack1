@@ -8,7 +8,7 @@ function HomePage() {
 
   useEffect(() => {
     const links = document.querySelectorAll("a[href^='#']");
-    links.forEach((link) => {
+    links.forEach(link => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
         const target = document.querySelector(link.getAttribute("href"));
@@ -19,131 +19,66 @@ function HomePage() {
     });
   }, []);
 
-  const fadeUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
     <div style={styles.body}>
-      {/* Navbar */}
-      <Navbar expand="lg" style={styles.navbar} fixed="top" variant="dark">
+      <Navbar expand="lg" style={styles.navbar}>
         <Container>
-          <Navbar.Brand href="/" style={styles.brand}>
-            rescueTrack
-          </Navbar.Brand>
+          <Navbar.Brand href="/" style={styles.brand}>Rescue Track</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link href="/" style={styles.navLink}>
-                হোম
-              </Nav.Link>
-              <Nav.Link href="#about" style={styles.navLink}>
-                সম্পর্কে
-              </Nav.Link>
-              <Nav.Link href="/disaster-info" style={styles.navLink}>
-                দুর্যোগ তথ্য
-              </Nav.Link>
-              <Nav.Link href="/donate" style={styles.navLink}>
-                দান করুন
-              </Nav.Link>
-              <Nav.Link href="/map" style={styles.navLink}>
-                রিলিফ মানচিত্র
-              </Nav.Link>
-              <Nav.Link href="#contact" style={styles.navLink}>
-                যোগাযোগ
-              </Nav.Link>
+              <Nav.Link href="/" style={styles.navLink}>Home</Nav.Link>
+              <Nav.Link href="#about" style={styles.navLink}>About</Nav.Link>
+              <Nav.Link href="/disaster-info" style={styles.navLink}>Disaster Info</Nav.Link>
+              <Nav.Link href="/donate" style={styles.navLink}>Donate</Nav.Link>
+              <Nav.Link href="/map" style={styles.navLink}>Relief Map</Nav.Link>
+              <Nav.Link href="#contact" style={styles.navLink}>Contact</Nav.Link>
             </Nav>
-
             <Nav className="ms-3">
-              <Button
-                style={styles.loginButton}
-                onClick={() => navigate("/Login")}
-                whileHover={{ scale: 1.05 }}
-              >
-                লগইন
-              </Button>
+              <Button style={styles.loginButton} onClick={() => navigate("/Login")}>Login</Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
-      {/* Hero Section */}
       <Container fluid style={styles.heroSection}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1 }}
           style={styles.heroContent}
         >
-          <motion.h1
-            style={styles.heroTitle}
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            rescueTrack: শক্তিশালী বাংলাদেশ, দ্রুত উদ্ধার
-          </motion.h1>
-          <motion.p
-            style={styles.heroSubtitle}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            বাংলাদেশের জন্য একটি দুর্যোগ ত্রাণ ও সহায়তা ব্যবস্থাপনা প্ল্যাটফর্ম
-          </motion.p>
+          <h1 style={{ fontWeight: "bold" }}>Rescue Track: Together for Bangladesh</h1>
+          <p>Empowering disaster response and community resilience across the nation.</p>
           <motion.button
-            whileHover={{ scale: 1.1, boxShadow: "0 8px 15px rgba(233,30,99,0.6)" }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             style={styles.heroButton}
             onClick={() => navigate("/VolunteerReg")}
           >
-            অংশগ্রহণ করুন
+            Get Involved
           </motion.button>
         </motion.div>
       </Container>
 
-      {/* Public Features */}
-      <Container
-        id="public-features"
-        style={{ ...styles.section, background: "#002f4b", color: "#f0f9ff" }}
-      >
-        <motion.h2
-          style={styles.sectionTitleWhite}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-        >
-          পাবলিক ফিচারস
-        </motion.h2>
+      <Container id="public-features" style={styles.section}>
+        <h2 style={styles.sectionTitle}>Explore Features</h2>
         <Row>
           {[
-            { title: "দুর্যোগ তথ্য দেখুন", text: "তাজা ও নির্ভরযোগ্য তথ্য পান।", link: "/disaster-info" },
-            { title: "দান করুন", text: "সহায়তায় অর্থ দিন।", link: "/donate" },
-            { title: "স্বেচ্ছাসেবক হোন", text: "উদ্ধারে আপনার হাত বাড়ান।", link: "/VolunteerReg" },
-            { title: "রিলিফ মানচিত্র", text: "সহায়তা কেন্দ্র ও বিপর্যয় অঞ্চল খুঁজুন।", link: "/map" },
-            { title: "রিয়েল-টাইম আপডেট", text: "সর্বশেষ খবর পেতে থাকুন।", link: "/publicview" },
+            { title: "Disaster Alerts", text: "Track flood, cyclone, and earthquake reports live.", link: "/disaster-info" },
+            { title: "Donate", text: "Support communities in need with your donations.", link: "/donate" },
+            { title: "Volunteer", text: "Join as a volunteer for field or remote support.", link: "/VolunteerReg" },
+            { title: "Relief Map", text: "Locate affected areas and aid distribution points.", link: "/map" },
+            { title: "Live Updates", text: "Get the latest news from disaster zones.", link: "/publicview" }
           ].map((feature, index) => (
             <Col key={index} md={4} className="mb-4">
-              <motion.div
-                whileHover={{ scale: 1.07, boxShadow: "0 10px 20px rgba(255,255,255,0.3)" }}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                variants={fadeUp}
-                transition={{ delay: 0.1 * index }}
-                style={{ cursor: "pointer" }}
-              >
-                <Card style={styles.cardGradient}>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Card style={styles.card}>
                   <Card.Body className="text-center">
-                    <Card.Title style={{ color: "#c1e7ff" }}>{feature.title}</Card.Title>
-                    <Card.Text style={{ color: "#a0d8ff" }}>{feature.text}</Card.Text>
-                    <Button
-                      style={styles.buttonGradient}
-                      onClick={() => navigate(feature.link)}
-                    >
-                      বিস্তারিত জানুন
+                    <Card.Title style={{ fontWeight: "600" }}>{feature.title}</Card.Title>
+                    <Card.Text>{feature.text}</Card.Text>
+                    <Button style={styles.button} onClick={() => navigate(feature.link)}>
+                      Learn More
                     </Button>
                   </Card.Body>
                 </Card>
@@ -153,102 +88,39 @@ function HomePage() {
         </Row>
       </Container>
 
-      {/* About rescueTrack */}
-      <Container
-        id="about"
-        style={{ ...styles.section, background: "#f9fafb", boxShadow: "0 8px 30px rgb(0 0 0 / 0.05)" }}
-      >
-        <motion.h2
-          style={styles.sectionTitleDark}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
-        >
-          rescueTrack সম্পর্কে
-        </motion.h2>
+      <Container id="about" style={styles.section}>
+        <h2 style={styles.sectionTitle}>About Rescue Track</h2>
         <Row>
           <Col md={6}>
-            <motion.p
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              style={styles.aboutTextDark}
-            >
-              <strong>আমাদের মিশন:</strong> বাংলাদেশে দুর্যোগ ত্রাণ কার্যক্রমকে দ্রুত, কার্যকর ও
-              স্বচ্ছ করার লক্ষ্যে rescueTrack কাজ করে যাচ্ছে। আমরা বাস্তব সময় তথ্য সরবরাহ করি,
-              দাতাদের এবং স্বেচ্ছাসেবকদের সরাসরি সংযোগ স্থাপন করি।
-            </motion.p>
+            <p>
+              <strong>Our Vision:</strong> Rescue Track is a dedicated platform initiated to serve people across
+              Bangladesh during natural and man-made disasters. From flash floods in Sylhet to cyclones in Khulna,
+              we stand united to respond, rebuild, and recover.
+            </p>
           </Col>
           <Col md={6}>
-            <motion.p
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              style={styles.aboutTextDark}
-            >
-              <strong>আমাদের প্রভাব:</strong> গ্রামীণ ও শহুরে অঞ্চলে আমরা শত শত পরিবারের কাছে
-              দ্রুত সাহায্য পৌঁছে দিই। দান, স্বেচ্ছাসেবক বা তথ্যের জন্য যারা ইচ্ছুক,
-              rescueTrack তাদের জন্য কার্যকরী একটি হাতিয়ার।
-            </motion.p>
+            <p>
+              <strong>Our Impact:</strong> Built with the spirit of unity, Rescue Track helps citizens access
+              timely aid, stay informed, and become part of the national emergency response. Together, we
+              create safer, more resilient communities.
+            </p>
           </Col>
         </Row>
       </Container>
 
-      {/* Contact Section */}
-      <Container
-        id="contact"
-        style={{ ...styles.section, background: "#002f4b", color: "#f0f9ff" }}
-      >
-        <motion.h2
-          style={styles.sectionTitleWhite}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          যোগাযোগ করুন
-        </motion.h2>
+      <Container id="contact" style={styles.section}>
+        <h2 style={styles.sectionTitle}>Contact Us</h2>
         <Row>
           <Col md={6}>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-            >
-              <strong>ইমেইল:</strong> rescueTrack.bd@gmail.com
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-            >
-              <strong>ফোন:</strong> +880 1700 123456
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-            >
-              <strong>ঠিকানা:</strong> ১২৩ জাতীয় দুর্যোগ মন্ত্রণালয়, ঢাকা, বাংলাদেশ
-            </motion.p>
+            <p><strong>Email:</strong> rescuetrack.bd@gmail.com</p>
+            <p><strong>Phone:</strong> +880 1611 223344</p>
+            <p><strong>Address:</strong> 21/A Relief Road, Dhaka 1207, Bangladesh</p>
           </Col>
           <Col md={6}>
-            <motion.p
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              style={{ lineHeight: "1.5rem" }}
-            >
-              আপনার প্রশ্ন বা স্বেচ্ছাসেবক, দাতা বা দুর্যোগ কর্মী হিসেবে অংশগ্রহণের জন্য আমাদের সাথে যোগাযোগ করুন।
-              একসাথে আমরা দ্রুত ও কার্যকর সহায়তা পৌঁছে দিতে পারব।
-            </motion.p>
+            <p>
+              Want to help or need help? Rescue Track is here to connect citizens, volunteers,
+              and authorities. Together, we can face any crisis and rebuild stronger.
+            </p>
           </Col>
         </Row>
       </Container>
@@ -258,124 +130,78 @@ function HomePage() {
 
 const styles = {
   body: {
-    background: "#e3f2fd",
-    color: "#111827",
+    background: "#F7FAFC",
+    color: "#2C3E50",
     minHeight: "100vh",
-    paddingTop: "75px",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   },
   navbar: {
-    background: "linear-gradient(90deg, #0D47A1, #1976D2)",
-    boxShadow: "0 2px 12px rgba(0, 0, 0, 0.25)",
+    background: "#0A2647",
   },
   brand: {
-    fontSize: "2rem",
-    fontWeight: "900",
-    color: "#fff",
-    letterSpacing: "2px",
-    textShadow: "1.5px 1.5px 4px rgba(0,0,0,0.7)",
+    fontSize: "1.8rem",
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   navLink: {
-    color: "#bbdefb",
-    fontSize: "1.15rem",
-    marginLeft: "14px",
-    fontWeight: "600",
-    transition: "color 0.3s",
+    color: "#FFFFFF",
+    fontSize: "1.05rem",
+    marginRight: "10px",
   },
   loginButton: {
-    borderRadius: "30px",
-    padding: "10px 28px",
-    fontWeight: "700",
-    background: "#c2185b",
+    background: "#2EB872",
     border: "none",
     color: "#fff",
-    cursor: "pointer",
-    boxShadow: "0 6px 20px rgba(194,24,91,0.7)",
-    transition: "background 0.3s",
+    padding: "8px 16px",
+    borderRadius: "25px",
+    fontWeight: "bold",
   },
   heroSection: {
-    height: "70vh",
+    height: "65vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(135deg, #1565c0 0%, #64b5f6 100%)",
+    background: "linear-gradient(135deg, #0077B6, #00B4D8)",
     textAlign: "center",
-    color: "#fff",
-    padding: "0 20px",
-    boxShadow: "inset 0 0 60px rgba(255,255,255,0.3)",
-  },
-  heroContent: {
-    maxWidth: "800px",
-  },
-  heroTitle: {
-    fontSize: "3.4rem",
-    fontWeight: "900",
-    marginBottom: "20px",
-    textShadow: "3px 3px 8px rgba(0, 0, 0, 0.7)",
-  },
-  heroSubtitle: {
-    fontSize: "1.7rem",
-    marginBottom: "35px",
-    fontWeight: "600",
-    textShadow: "1.5px 1.5px 6px rgba(0, 0, 0, 0.5)",
+    color: "#FFFFFF",
+    padding: "30px",
   },
   heroButton: {
-    padding: "16px 40px",
-    fontSize: "1.4rem",
+    marginTop: "20px",
+    padding: "12px 30px",
+    fontSize: "1.2rem",
     fontWeight: "bold",
-    borderRadius: "45px",
-    background: "#c2185b",
+    borderRadius: "30px",
+    background: "#2EB872",
     color: "#fff",
     border: "none",
-    cursor: "pointer",
-    boxShadow: "0 10px 30px rgba(194, 24, 91, 0.7)",
-    transition: "background 0.3s ease",
   },
   section: {
+    background: "#FFFFFF",
     padding: "60px 20px",
-    marginTop: "30px",
-    borderRadius: "15px",
+    marginTop: "40px",
+    borderRadius: "12px",
   },
-  sectionTitleWhite: {
-    fontSize: "2.8rem",
+  sectionTitle: {
+    fontSize: "2rem",
     textAlign: "center",
-    color: "#f0f9ff",
-    marginBottom: "40px",
-    fontWeight: "900",
-    textShadow: "2px 2px 8px rgba(0,0,0,0.6)",
+    color: "#0A2647",
+    marginBottom: "30px",
+    fontWeight: "bold",
   },
-  sectionTitleDark: {
-    fontSize: "2.8rem",
-    textAlign: "center",
-    color: "#111827",
-    marginBottom: "40px",
-    fontWeight: "900",
+  card: {
+    background: "#E8F1FA",
+    padding: "20px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
   },
-  cardGradient: {
-    background: "linear-gradient(145deg, #1565c0, #1976d2)",
-    padding: "25px",
-    textAlign: "center",
+  button: {
     borderRadius: "20px",
-    boxShadow: "0 12px 30px rgba(25, 118, 210, 0.5)",
-    color: "#bbdefb",
-    cursor: "pointer",
-    transition: "box-shadow 0.3s ease",
-  },
-  buttonGradient: {
-    borderRadius: "30px",
-    padding: "12px 30px",
-    fontWeight: "700",
-    background: "#c2185b",
+    padding: "10px 20px",
+    fontWeight: "bold",
+    background: "#0A2647",
     color: "#fff",
     border: "none",
-    cursor: "pointer",
-    boxShadow: "0 8px 25px rgba(194, 24, 91, 0.7)",
-    transition: "background 0.3s ease",
-  },
-  aboutTextDark: {
-    fontSize: "1.2rem",
-    lineHeight: "1.9rem",
-    color: "#222",
   },
 };
 

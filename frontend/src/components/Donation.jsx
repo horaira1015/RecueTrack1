@@ -104,7 +104,7 @@ const DonationSlip = () => {
             type="email"
           />
           <InputField
-            label="Donation Amount (₹)"
+            label="Donation Amount (Taka)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="e.g., 500"
@@ -193,7 +193,7 @@ const DonationSlip = () => {
           </h2>
           <p style={{ marginTop: "10px", color: "#333" }}>Donor: {name}</p>
           <p style={{ color: "#333" }}>Email: {email}</p>
-          <p style={{ color: "#333" }}>Amount: ₹{amount}</p>
+          <p style={{ color: "#333" }}>Amount: Taka{amount}</p>
           {message && (
             <p style={{ color: "#555", fontStyle: "italic" }}>Message: {message}</p>
           )}
