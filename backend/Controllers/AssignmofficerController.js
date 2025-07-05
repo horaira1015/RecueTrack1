@@ -32,10 +32,13 @@ const assignMedicalOfficer = async (req, res) => {
         }
 
         // Check if assignment already exists
-        const existingAssignment = await AssignMedicalOfficer.findOne({ medicalOfficerId: MOfficerId });
+        const existingAssignment = await AssignMedicalOfficer.findOne({MOfficerId: MOfficerId});
+        console.log(MOfficerId)
         if (existingAssignment) {
+            console.log(existingAssignment)
             return res.status(400).json({ message: "Officer is already assigned to a camp." });
         }
+        console.log(existingAssignment + "--------")
 
         const newAssignment = new AssignMedicalOfficer({
             MOfficerId,

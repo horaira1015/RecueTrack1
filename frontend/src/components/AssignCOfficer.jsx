@@ -50,7 +50,7 @@ function AssignCOfficer() {
       setSuccessMessage("Officer assigned to camp successfully!");
       
       // Fetch updated assigned officers list
-      const updatedOfficers = await axios.get("http://localhost:5553/api/assigncofficer/getAssignedCamp");
+      const updatedOfficers = await axios.get("http://localhost:5553/api/assigncofficer/getAssignedOfficers");
       setAssignedOfficers(updatedOfficers.data);
 
       // Clear success message and navigate after 2 seconds

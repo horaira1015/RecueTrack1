@@ -36,8 +36,8 @@ function MedicalOfficerRegistration() {
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       newErrors.email = "Enter a valid email address";
-    if (!formData.phone.trim() || !/^\d{10}$/.test(formData.phone))
-      newErrors.phone = "Enter a valid 10-digit phone number";
+    if (!formData.phone.trim() || !/^01[3-9]\d{8}$/.test(formData.phone))
+      newErrors.phone = "Enter a valid 11-digit phone number (starting with 013-019)";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.password.trim() || formData.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";

@@ -23,6 +23,7 @@ const assignCampOfficer = async (req, res) => {
             return res.status(404).json({ message: "Camp Officer not found." });
         }
 
+
         // Check if camp exists
         const campExists = await CampAid.findById(campId);
         if (!campExists) {
