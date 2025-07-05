@@ -191,6 +191,7 @@ const VictimHealthStatusPage = () => {
   const exportToCSV = () => {
     const rows = [];
     Object.values(filteredVictims).forEach((victim) => {
+      console.log(victim)
       const members = [victim, ...(victim.family || [])];
       members.forEach((person) => {
         rows.push([
@@ -200,6 +201,7 @@ const VictimHealthStatusPage = () => {
           victim.campId || "N/A",
         ]);
       });
+      
     });
     const csvContent =
       "Name,Health Status,Type,Camp ID\n" + rows.map((row) => row.join(",")).join("\n");

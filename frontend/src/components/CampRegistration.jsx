@@ -19,10 +19,72 @@ function CampRegistration() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const districts = [
-    "Select District", "Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod",
-    "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta",
-    "Thiruvananthapuram", "Thrissur", "Wayanad"
-  ];
+    "Select District",
+    "Bagerhat",
+    "Bandarban",
+    "Barguna",
+    "Barisal",
+    "Bhola",
+    "Bogra",
+    "Brahmanbaria",
+    "Chandpur",
+    "Chapai Nawabganj",
+    "Chattogram",
+    "Chuadanga",
+    "Cox's Bazar",
+    "Cumilla",
+    "Dhaka",
+    "Dinajpur",
+    "Faridpur",
+    "Feni",
+    "Gaibandha",
+    "Gazipur",
+    "Gopalganj",
+    "Habiganj",
+    "Jamalpur",
+    "Jashore",
+    "Jhalokati",
+    "Jhenaidah",
+    "Joypurhat",
+    "Khagrachhari",
+    "Khulna",
+    "Kishoreganj",
+    "Kurigram",
+    "Kushtia",
+    "Lakshmipur",
+    "Lalmonirhat",
+    "Madaripur",
+    "Magura",
+    "Manikganj",
+    "Meherpur",
+    "Moulvibazar",
+    "Munshiganj",
+    "Mymensingh",
+    "Naogaon",
+    "Narail",
+    "Narayanganj",
+    "Narsingdi",
+    "Natore",
+    "Netrokona",
+    "Nilphamari",
+    "Noakhali",
+    "Pabna",
+    "Panchagarh",
+    "Patuakhali",
+    "Pirojpur",
+    "Rajbari",
+    "Rajshahi",
+    "Rangamati",
+    "Rangpur",
+    "Satkhira",
+    "Shariatpur",
+    "Sherpur",
+    "Sirajganj",
+    "Sunamganj",
+    "Sylhet",
+    "Tangail",
+    "Thakurgaon"
+];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,8 +99,8 @@ function CampRegistration() {
     if (!formData.place.trim()) newErrors.place = "Place is required";
     if (!formData.pincode.trim()) {
       newErrors.pincode = "Pincode is required";
-    } else if (!/^\d{6}$/.test(formData.pincode)) {
-      newErrors.pincode = "Pincode must be 6 digits";
+    } else if (!/^\d{4}$/.test(formData.pincode)) {
+      newErrors.pincode = "Pincode must be 4 digits";
     }
     if (!formData.totalCapacity.trim()) {
       newErrors.totalCapacity = "Total capacity is required";
@@ -121,7 +183,7 @@ function CampRegistration() {
 
             <Form.Group className="mb-2">
               <Form.Label>Pincode</Form.Label>
-              <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} isInvalid={!!errors.pincode} placeholder="Enter 6-digit pincode" />
+              <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} isInvalid={!!errors.pincode} placeholder="Enter 4-digit pincode" />
               <Form.Control.Feedback type="invalid">{errors.pincode}</Form.Control.Feedback>
             </Form.Group>
 

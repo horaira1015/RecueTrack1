@@ -1,4 +1,5 @@
 const CampOfficer = require("../Models/CofficerRegModel");
+const MedicalOfficer = require("../Models/MofficerRegModel")
 const CampAid =require("../Models/CampRegModel")
 const AssignCampOfficer=require("../Models/AssignCofficerModel")
 const nodemailer = require("nodemailer");
@@ -50,7 +51,12 @@ exports.registerCampOfficer = async (req, res) => {
             // Check if officer already exists
             const existingOfficer = await CampOfficer.findOne({ email });
             if (existingOfficer) {
-                return res.status(400).json({ message: "Officer already registered!" });
+                return res.status(400).json({ message: "Camp Officer already registered!" });
+            }
+            // Check if officer already exists
+            const existingOfficer2 = await MedicalOfficer.findOne({ email });
+            if (existingOfficer2) {
+                return res.status(400).json({ message: "Medical Officer already registered!" });
             }
 
             // Hash password before saving

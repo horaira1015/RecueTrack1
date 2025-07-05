@@ -1,4 +1,5 @@
 const MedicalOfficer = require("../Models/MofficerRegModel");
+const CampOfficer = require("../Models/CofficerRegModel")
 const AssignMedicalOfficer=require("../Models/AssignMofficerModel")
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
@@ -50,6 +51,10 @@ exports.registerMedicalOfficer = async (req, res) => {
             const existingOfficer = await MedicalOfficer.findOne({ email });
             if (existingOfficer) {
                 return res.status(400).json({ message: "Medical Officer already registered!" });
+            }
+             const existingOfficer2 = await CampOfficer.findOne({ email });
+            if (existingOfficer2) {
+                return res.status(400).json({ message: "Camp Officer already registered!" });
             }
 
             // Hash password before saving

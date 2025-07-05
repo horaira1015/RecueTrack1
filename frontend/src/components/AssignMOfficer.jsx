@@ -49,8 +49,9 @@ function AssignMOfficer() {
       setSuccessMessage("Officer assigned to camp successfully!");
       
       // Fetch updated assigned officers list
-      const updatedOfficers = await axios.get("http://localhost:5553/api/assignmofficer/getAssignedCamp");
+      const updatedOfficers = await axios.get(`http://localhost:5553/api/assignmofficer/getAssignedCamp/${officerId}`, {MOfficerId: officerId});
       setAssignedOfficers(updatedOfficers.data);
+      console.log("updated")
 
       // Clear success message and navigate after 2 seconds
       setTimeout(() => {
@@ -64,7 +65,7 @@ function AssignMOfficer() {
 
   return (
     <Container className="mt-4">
-      <h3>Assign Camp Officer to a Camp</h3>
+      <h3>Assign Medical Officer to a Camp</h3>
 
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}

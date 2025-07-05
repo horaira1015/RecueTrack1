@@ -10,7 +10,7 @@ exports.addMedicalReport = async (req, res) => {
     }
     console.log("Received data:", req.body);
     const reports = await MedicalReport.find({ officerId }).populate("victimId");
-res.json(reports);
+    res.json(reports);
 
 
     const newReport = new MedicalReport({

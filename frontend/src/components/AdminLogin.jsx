@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMessage("");
     setIsLoading(true);
@@ -21,42 +20,30 @@ function Login() {
       return;
     }
 
-    try {
-      const res = await axios.post("http://localhost:5553/api/auth/campofficer", 
-        { email, password },
-        { withCredentials: true }
-      );
-      
-      console.log("Full API Response:", res.data);
-      
-      if (res.data.success && res.data.campOfficerId) {
-        console.log("✅ officerId received:", res.data.campOfficerId);
-        localStorage.setItem("officerId", res.data.campOfficerId);
-        navigate("/COfficerDashboard");
-      } else {
-        console.error("❌ Login failed, response:", res.data);
-        setErrorMessage(res.data.message || "Invalid login credentials. Please try again.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrorMessage("An error occurred. Please try again.");
-    } finally {
+    // Admin login check
+    if (email === "admin@gmail.com" && password === "admin123") {
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/AdminDashboard');
+      }, 1000); // Simulate loading delay
+    } else {
       setIsLoading(false);
+      setErrorMessage("Invalid admin credentials");
     }
   };
 
   return (
     <div style={styles.container}>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
         style={styles.loginCard}
       >
         <div style={styles.header}>
-          <div style={styles.logo}>🏕️</div>
-          <h2 style={styles.title}>Camp Officer Login</h2>
-          <p style={styles.subtitle}>Access your relief camp management dashboard</p>
+          <div style={styles.logo}>🔒</div>
+          <h2 style={styles.title}>Admin Portal</h2>
+          <p style={styles.subtitle}>Restricted access to system administration</p>
         </div>
 
         {errorMessage && (
@@ -71,10 +58,10 @@ function Login() {
 
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
-            <label style={styles.label}>Email Address</label>
+            <label style={styles.label}>Admin Email</label>
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="admin@gmail.com"
               style={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -86,7 +73,7 @@ function Login() {
             <label style={styles.label}>Password</label>
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Enter admin password"
               style={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -117,43 +104,16 @@ function Login() {
                 >
                   <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                 </svg>
-                Logging in...
+                Authenticating...
               </>
             ) : (
-              "Login"
+              "Access Admin Dashboard"
             )}
           </motion.button>
         </form>
 
-        <div style={styles.links}>
-          <Link to="/Login" style={styles.link}>
-            Medical Officer Login
-          </Link>
-          <span style={styles.divider}>•</span>
-          <Link to="/forgot-password" style={styles.link}>
-            Forgot Password?
-          </Link>
-        </div>
-        <div style={styles.otherLogins}>
-          <p style={styles.otherLoginsText}>Or login as:</p>
-          <div style={styles.otherButtons}>
-            <motion.button
-              style={styles.volunteerButton}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate('/VolunteerLogin')}
-            >
-              Volunteer
-            </motion.button>
-            <motion.button
-              style={styles.adminButton}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate('/AdminLogin')}
-            >
-              Admin
-            </motion.button>
-          </div>
+        <div style={styles.footer}>
+          <p style={styles.footerText}>For security reasons, admin access is strictly monitored</p>
         </div>
       </motion.div>
     </div>
@@ -161,48 +121,12 @@ function Login() {
 }
 
 const styles = {
-   otherLogins: {
-    textAlign: 'center',
-  },
-  otherButtons: {
-    display: 'flex',
-    gap: '12px',
-  },
-  otherLoginsText: {
-    color: '#718096',
-    fontSize: '14px',
-    marginBottom: '12px',
-  },
-   adminButton: {
-    flex: 1,
-    padding: '12px',
-    fontSize: '14px',
-    fontWeight: '600',
-    backgroundColor: '#667eea',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.3s',
-  },
-   volunteerButton: {
-    flex: 1,
-    padding: '12px',
-    fontSize: '14px',
-    fontWeight: '600',
-    backgroundColor: '#f6ad55',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.3s',
-  },
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)',
+    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
     padding: '20px',
   },
   loginCard: {
@@ -211,7 +135,7 @@ const styles = {
     background: '#ffffff',
     borderRadius: '12px',
     padding: '40px',
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2)',
   },
   header: {
     textAlign: 'center',
@@ -220,6 +144,7 @@ const styles = {
   logo: {
     fontSize: '48px',
     marginBottom: '15px',
+    color: '#4a00e0',
   },
   title: {
     fontSize: '24px',
@@ -230,6 +155,7 @@ const styles = {
   subtitle: {
     fontSize: '14px',
     color: '#718096',
+    opacity: 0.8,
   },
   errorMessage: {
     backgroundColor: '#fff5f5',
@@ -261,17 +187,17 @@ const styles = {
     borderRadius: '8px',
     transition: 'all 0.3s',
     ':focus': {
-      borderColor: '#4299e1',
-      boxShadow: '0 0 0 3px rgba(66, 153, 225, 0.2)',
+      borderColor: '#4a00e0',
+      boxShadow: '0 0 0 3px rgba(74, 0, 224, 0.1)',
       outline: 'none',
     },
   },
   loginButton: {
     width: '100%',
-    padding: '14px',
+    padding: '16px',
     fontSize: '16px',
     fontWeight: '600',
-    backgroundColor: '#38a169',
+    backgroundColor: '#4a00e0',
     color: '#ffffff',
     border: 'none',
     borderRadius: '8px',
@@ -289,27 +215,17 @@ const styles = {
   spinner: {
     animation: 'spin 1s linear infinite',
   },
-  links: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '12px',
+  footer: {
+    textAlign: 'center',
+    marginTop: '20px',
+    paddingTop: '20px',
+    borderTop: '1px solid #edf2f7',
   },
-  link: {
-    color: '#4299e1',
-    fontSize: '14px',
-    fontWeight: '500',
-    textDecoration: 'none',
-    transition: 'all 0.3s',
-    ':hover': {
-      color: '#3182ce',
-      textDecoration: 'underline',
-    },
-  },
-  divider: {
-    color: '#cbd5e0',
-    fontSize: '14px',
+  footerText: {
+    color: '#718096',
+    fontSize: '12px',
+    opacity: 0.7,
   },
 };
 
-export default Login;
+export default AdminLogin;

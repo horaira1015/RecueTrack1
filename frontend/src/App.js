@@ -52,7 +52,7 @@ import AdminEmailPage from './components/AlertPage';
 import MarkCoordinates from './components/MarkCoordinates';
 import LocationManager from './components/LocationManager';
 import ForgotPassword from './components/ForgotPassword';
-
+import AdminLogin from './components/AdminLogin';
 
 function App() {
   return (
@@ -65,7 +65,7 @@ function App() {
 
     <Route path='/' element={<HomePage/>}/>
 
-
+      <Route path='/AdminLogin' element={<AdminLogin/>}></Route>
       <Route path='/Navbarr' element={<Navbarr/>}/>
       <Route path='/AdminDashboard' element={<AdminDashboard/>}/>
       <Route path='/CampRegistration' element={<CampRegistration/>}/>
