@@ -79,16 +79,13 @@ function CampOfficerDashboard() {
     }
   };
 
-  const fetchVolunteerCount = async (campId) => {
-
-    
+  const fetchVolunteerCount = async () => {
     try {
-
       const campId = localStorage.getItem("campId"); // Ensure campId is retrieved
-  if (!campId) {
-    console.error("Camp ID not found");
-    return;
-  }
+      if (!campId) {
+        console.error("Camp ID not found");
+        return;
+      }
       const res = await fetch(`http://localhost:5553/api/volunteer/approvedVolunteers/${campId}`);
       const data = await res.json();
 
