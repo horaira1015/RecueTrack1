@@ -1,154 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 const DonationSlip = () => {
-  const slipRef = useRef();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
-  const [donationSuccess, setDonationSuccess] = useState(false);
 
-  const generatePDF = async () => {
+  const initiatePayment = async () => {
     if (isDisabled) return;
-    setIsDisabled(true);
 
-    const slipElement = slipRef.current;
-    if (!slipElement) {
-      alert("Error: Unable to find the slip.");
-      setIsDisabled(false);
+    if (!name || !email || !amount) {
+      alert("Please fill in name, email, and amount.");
       return;
     }
 
+    setIsDisabled(true);
+
     try {
-      await axios.post("http://localhost:5553/api/donate/donations", {
+      const response = await axios.post("http://localhost:5553/api/donate/init-payment", {
         name,
         email,
         amount,
         message,
       });
 
-      const canvas = await html2canvas(slipElement);
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF("p", "mm", "a4");
-      pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
-      const pdfBlob = pdf.output("blob");
-
-      const reader = new FileReader();
-      reader.readAsDataURL(pdfBlob);
-      reader.onloadend = async () => {
-        const pdfData = reader.result.split(",")[1];
-        await axios.post("http://localhost:5553/api/cofficerReg/email", {
-          email,
-          pdfData,
-        });
-        setDonationSuccess(true);
-      };
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      } else {
+        alert("Failed to get payment URL.");
+        setIsDisabled(false);
+      }
     } catch (error) {
-      alert("Error processing donation.");
+      alert("Error initiating payment. Please try again.");
       setIsDisabled(false);
     }
   };
-
-  if (donationSuccess) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#f8f9fa",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "2rem",
-          fontFamily: "'Inter', sans-serif",
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "500px",
-            backgroundColor: "#ffffff",
-            padding: "2.5rem",
-            borderRadius: "16px",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              width: "80px",
-              height: "80px",
-              backgroundColor: "#e3f2fd",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 1.5rem",
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#1976d2"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: "700",
-              color: "#1976d2",
-              marginBottom: "1rem",
-            }}
-          >
-            Donation Successful!
-          </h1>
-          <p
-            style={{
-              fontSize: "16px",
-              color: "#555",
-              lineHeight: "1.6",
-              marginBottom: "2rem",
-            }}
-          >
-            Thank you, {name}, for your generous donation of Taka {amount}. Your
-            receipt has been sent to {email}.
-          </p>
-          <button
-            onClick={() => window.history.back()}
-            style={{
-              padding: "12px 24px",
-              fontSize: "16px",
-              fontWeight: "600",
-              borderRadius: "8px",
-              border: "none",
-              backgroundColor: "#1976d2",
-              color: "#fff",
-              cursor: "pointer",
-              transition: "all 0.3s",
-              boxShadow: "0 4px 6px rgba(25, 118, 210, 0.2)",
-            }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#1565c0")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#1976d2")}
-          >
-            Return to Home
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -331,7 +219,7 @@ const DonationSlip = () => {
         </div>
 
         <button
-          onClick={generatePDF}
+          onClick={initiatePayment}
           disabled={isDisabled}
           style={{
             width: "100%",
@@ -393,81 +281,6 @@ const DonationSlip = () => {
             </>
           )}
         </button>
-      </div>
-
-      {/* Hidden Receipt */}
-      <div style={{ position: "absolute", left: "-9999px" }}>
-        <div
-          ref={slipRef}
-          style={{
-            padding: "24px",
-            backgroundColor: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: "12px",
-            width: "400px",
-            textAlign: "center",
-            fontFamily: "'Inter', sans-serif",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <div
-            style={{
-              marginBottom: "20px",
-              paddingBottom: "16px",
-              borderBottom: "1px solid #eee",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "22px",
-                fontWeight: "700",
-                color: "#1976d2",
-                marginBottom: "4px",
-              }}
-            >
-              Donation Receipt
-            </h2>
-            <p style={{ fontSize: "14px", color: "#777" }}>
-              Thank you for your generous support
-            </p>
-          </div>
-          <div
-            style={{
-              textAlign: "left",
-              marginBottom: "20px",
-              lineHeight: "1.8",
-            }}
-          >
-            <p style={{ color: "#333" }}>
-              <strong>Donor:</strong> {name}
-            </p>
-            <p style={{ color: "#333" }}>
-              <strong>Email:</strong> {email}
-            </p>
-            <p style={{ color: "#333" }}>
-              <strong>Amount:</strong> Taka {amount}
-            </p>
-            {message && (
-              <p style={{ color: "#555", marginTop: "12px" }}>
-                <strong>Message:</strong> {message}
-              </p>
-            )}
-          </div>
-          <div
-            style={{
-              marginTop: "24px",
-              paddingTop: "16px",
-              borderTop: "1px solid #eee",
-            }}
-          >
-            <p style={{ fontSize: "13px", color: "#888", marginBottom: "8px" }}>
-              Transaction ID: {Math.random().toString(36).substring(2, 10).toUpperCase()}
-            </p>
-            <p style={{ fontSize: "14px", color: "#1976d2", fontWeight: "600" }}>
-              Thank you for your kindness! ❤️
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

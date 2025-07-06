@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Button, Alert, Table } from "react-bootstrap";
+import { Container, Form, Button, Alert, Table, Row, Col, Card } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -12,7 +12,6 @@ function AssignMOfficer() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Fetch all camps
   useEffect(() => {
     const fetchCamps = async () => {
       try {
@@ -36,24 +35,26 @@ function AssignMOfficer() {
     fetchAssignedOfficers();
   }, []);
 
-  // Handle form submission
   const handleAssign = async (e) => {
     e.preventDefault();
     if (!selectedCamp) return setError("Please select a camp.");
 
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
-      await axios.put(`http://localhost:5553/api/assignmofficer/assign/${officerId}`, {MOfficerId: officerId, campId: selectedCamp });
+      await axios.put(`http://localhost:5553/api/assignmofficer/assign/${officerId}`, {
+        MOfficerId: officerId,
+        campId: selectedCamp,
+      });
 
       setSuccessMessage("Officer assigned to camp successfully!");
-      
-      // Fetch updated assigned officers list
-      const updatedOfficers = await axios.get(`http://localhost:5553/api/assignmofficer/getAssignedCamp/${officerId}`, {MOfficerId: officerId});
-      setAssignedOfficers(updatedOfficers.data);
-      console.log("updated")
 
-      // Clear success message and navigate after 2 seconds
+      const updatedOfficers = await axios.get(
+        `http://localhost:5553/api/assignmofficer/getAssignedCamp/${officerId}`,
+        { MOfficerId: officerId }
+      );
+      setAssignedOfficers(updatedOfficers.data);
+
       setTimeout(() => {
         setSuccessMessage("");
         navigate("/viewmedicalofficer");
@@ -64,62 +65,76 @@ function AssignMOfficer() {
   };
 
   return (
-    <Container className="mt-4">
-      <h3>Assign Medical Officer to a Camp</h3>
+    <Container className="mt-5">
+      <Card className="shadow-sm p-4 mb-5">
+        <h3 className="mb-4 text-center text-primary">Assign Medical Officer to a Camp</h3>
 
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
-      {error && <Alert variant="danger">{error}</Alert>}
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
+        {error && <Alert variant="danger">{error}</Alert>}
 
-      <Form onSubmit={handleAssign}>
-        <Form.Group className="mb-3">
-          <Form.Label>Select Camp</Form.Label>
-          <Form.Select value={selectedCamp} onChange={(e) => setSelectedCamp(e.target.value)}>
-            <option value="">-- Select a Camp --</option>
-            {camps.map((camp) => (
-              <option key={camp._id} value={camp._id}>
-                {camp.name} ({camp.place}, {camp.district})
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
+        <Form onSubmit={handleAssign}>
+          <Row>
+            <Col md={8}>
+              <Form.Group>
+                <Form.Label className="fw-semibold">Select Camp</Form.Label>
+                <Form.Select
+                  value={selectedCamp}
+                  onChange={(e) => setSelectedCamp(e.target.value)}
+                  className="mb-3"
+                >
+                  <option value="">-- Select a Camp --</option>
+                  {camps.map((camp) => (
+                    <option key={camp._id} value={camp._id}>
+                      {camp.name} ({camp.place}, {camp.district})
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+            <Col md={4} className="d-flex align-items-end">
+              <Button variant="success" type="submit" className="w-100">
+                Assign Officer
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
 
-        <Button variant="primary" type="submit">
-          Assign Officer
-        </Button>
-      </Form>
-
-      {/* Assigned Officers Table */}
-      <h4 className="mt-5">Assigned Medical Officers</h4>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Officer Name</th>
-            <th>Email</th>
-            <th>Camp Name</th>
-            <th>Place</th>
-            <th>Assigned Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {assignedOfficers.length > 0 ? (
-            assignedOfficers.map((officer, index) => (
-              <tr key={officer._id}>
-                <td>{index + 1}</td>
-                <td>{officer.MOfficerId?.name || "N/A"}</td>
-                <td>{officer.MOfficerId?.email || "N/A"}</td>
-                <td>{officer.campId?.name || "N/A"}</td>
-                <td>{officer.campId?.place || "N/A"}</td>
-                <td>{new Date(officer.assignDate).toLocaleDateString()}</td>
-              </tr>
-            ))
-          ) : (
+      <Card className="shadow-sm p-4">
+        <h4 className="mb-3 text-primary">Assigned Medical Officers</h4>
+        <Table striped bordered hover responsive>
+          <thead className="table-dark">
             <tr>
-              <td colSpan="6" className="text-center">No assigned officers found</td>
+              <th>#</th>
+              <th>Officer Name</th>
+              <th>Email</th>
+              <th>Camp Name</th>
+              <th>Place</th>
+              <th>Assigned Date</th>
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {assignedOfficers.length > 0 ? (
+              assignedOfficers.map((officer, index) => (
+                <tr key={officer._id}>
+                  <td>{index + 1}</td>
+                  <td>{officer.MOfficerId?.name || "N/A"}</td>
+                  <td>{officer.MOfficerId?.email || "N/A"}</td>
+                  <td>{officer.campId?.name || "N/A"}</td>
+                  <td>{officer.campId?.place || "N/A"}</td>
+                  <td>{new Date(officer.assignDate).toLocaleDateString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center text-muted">
+                  No assigned officers found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </Card>
     </Container>
   );
 }

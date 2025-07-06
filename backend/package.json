@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
-    "nodemailer": "^7.0.4"
+    "nodemailer": "^7.0.4",
+    "sslcommerz-lts": "^1.1.0"
   }
 }

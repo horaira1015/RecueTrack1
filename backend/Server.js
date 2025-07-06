@@ -29,7 +29,7 @@ const medicalRequestRoutes = require("./Routes/MedicalRequestRoutes");
 const DonationRoutes = require("./Routes/DonationRoutes");
 const incidentRoutes = require("./Routes/IncidentReportRoutes");
 const emailRoutes=require("./Routes/AlertRoutes")
-const ForgotPassRoutes = require("./Routes/ForgotPassRoutes"); // ✅ Import Forgot Password Routes
+const ForgotPassRoutes = require("./Routes/ForgotPassRoutes"); // ✅
 
 
 const app = express();

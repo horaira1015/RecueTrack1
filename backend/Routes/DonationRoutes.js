@@ -1,4 +1,6 @@
 const express = require("express");
+const sslCommerzPayment = require("../Controllers/SSLCommerzController");
+
 const {
   createDonation,
   getAllDonations,
@@ -8,6 +10,16 @@ const {
 } = require("../Controllers/DonationController");
 
 const router = express.Router();
+
+
+
+// New route to initiate payment
+router.post("/init-payment", sslCommerzPayment.initPayment);
+
+// Optional: handle success/fail/cancel from SSLCommerz
+router.post("/ssl-payment-success", sslCommerzPayment.paymentSuccess);
+router.post("/ssl-payment-fail", sslCommerzPayment.paymentFail);
+router.post("/ssl-payment-cancel", sslCommerzPayment.paymentCancel);
 
 // Create a new donation
 router.post("/donations", createDonation);

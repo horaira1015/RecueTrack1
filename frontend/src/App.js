@@ -53,6 +53,7 @@ import MarkCoordinates from './components/MarkCoordinates';
 import LocationManager from './components/LocationManager';
 import ForgotPassword from './components/ForgotPassword';
 import AdminLogin from './components/AdminLogin';
+import DonationSuccess from "./components/DonationSuccess"; // Adjust path if needed
 
 function App() {
   return (
@@ -83,7 +84,7 @@ function App() {
       <Route path="/victims" element={<VictimsOverview />} />
       <Route path="/viewItems" element={<AdminItemsByCategory/>} />
       <Route path="/alerts" element={<AdminEmailPage/>} />
-
+      <Route path="/donation-success" element={<DonationSuccess />} />
 
       <Route path="/logout" element={<Logout/>}/>
 
