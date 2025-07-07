@@ -1,21 +1,22 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Container, Card, Spinner } from "react-bootstrap";
 
 function Logout() {
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // Clear stored user data
-    localStorage.removeItem("officerId");
-    localStorage.removeItem("officerName"); // If storing officerName
-    localStorage.clear(); // Clears all stored data
+    // Clear all stored user data
+    localStorage.clear();
 
-    // Redirect after 2 seconds
+    // Prevent back navigation
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = () => {
+      window.history.go(1); // force forward
+    };
+
+    // Redirect to login after 2 seconds
     setTimeout(() => {
-      navigate("/login");
+      window.location.href = "/login";
     }, 2000);
-  }, [navigate]);
+  }, []);
 
   return (
     <Container className="d-flex justify-content-center align-items-center vh-100">
