@@ -56,7 +56,6 @@ const ViewDonations = () => {
         moneySpentFor: editedData.moneySpentFor,
       });
 
-      // Update frontend data
       setDonations(
         donations.map((donation) =>
           donation._id === id
@@ -92,20 +91,20 @@ const ViewDonations = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#141414", padding: "40px", color: "white" }}>
-      <div style={{ maxWidth: "90%", margin: "0 auto", background: "#1F1F1F", padding: "20px", borderRadius: "10px" }}>
-        <h2 style={{ textAlign: "center", fontSize: "28px", fontWeight: "bold", color: "#1E90FF", marginBottom: "20px" }}>
-          Donations List
+    <div style={{ backgroundColor: "#f4f6f9", minHeight: "100vh", padding: "40px" }}>
+      <div style={{ maxWidth: "95%", margin: "auto", backgroundColor: "#fff", borderRadius: "12px", padding: "30px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+        <h2 style={{ textAlign: "center", color: "#003366", fontSize: "28px", marginBottom: "25px" }}>
+          Donation Management Panel
         </h2>
 
-        {error && <p style={{ color: "red", textAlign: "center", marginBottom: "20px" }}>{error}</p>}
+        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", borderRadius: "10px", overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
             <thead>
-              <tr style={{ background: "#1E90FF", color: "black" }}>
-                {["#", "Name", "Email", "Amount (Taka)", "Spent (Taka)", "Balance (Taka)", "Message", "Actions"].map((header) => (
-                  <th key={header} style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #333" }}>
+              <tr style={{ backgroundColor: "#003366", color: "#fff" }}>
+                {["#", "Name", "Email", "Amount", "Spent", "Balance", "Message", "Actions"].map((header) => (
+                  <th key={header} style={{ padding: "12px", textAlign: "center", border: "1px solid #ccc" }}>
                     {header}
                   </th>
                 ))}
@@ -114,50 +113,74 @@ const ViewDonations = () => {
             <tbody>
               {donations.length > 0 ? (
                 donations.map((donation, index) => (
-                  <tr key={donation._id} style={{ background: index % 2 === 0 ? "#222" : "#333", transition: "background 0.3s" }}>
-                    <td style={{ padding: "12px", textAlign: "center" }}>{index + 1}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>{donation.name}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>{donation.email}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>Taka{donation.amount}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>
+                  <tr key={donation._id} style={{ backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff" }}>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>{index + 1}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>{donation.name}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>{donation.email}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>৳{donation.amount}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>
                       {donation.money_Spent_For.map((item, i) => (
-                        <div key={i}>
-                          {item.For}: Taka{item.amount}
-                        </div>
+                        <div key={i}>{item.For}: ৳{item.amount}</div>
                       ))}
                     </td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>Taka{donation.balance_amount}</td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>{donation.message || "—"}</td>
-                    <td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>৳{donation.balance_amount}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>{donation.message || "—"}</td>
+                    <td style={{ padding: "10px", textAlign: "center", border: "1px solid #ddd" }}>
                       {editingId === donation._id ? (
-                        <div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                           <input
                             type="text"
                             placeholder="Spent For"
                             value={editedData.moneySpentFor}
                             onChange={(e) => handleChange(e, "moneySpentFor")}
+                            style={{ padding: "6px", borderRadius: "4px", border: "1px solid #ccc" }}
                           />
                           <input
                             type="number"
                             placeholder="Amount"
                             value={editedData.moneySpent}
                             onChange={(e) => handleChange(e, "moneySpent")}
+                            style={{ padding: "6px", borderRadius: "4px", border: "1px solid #ccc" }}
                           />
-                          <button onClick={() => handleSaveEdit(donation._id)}>Save</button>
-                          <button onClick={handleCancelEdit}>Cancel</button>
+                          <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
+                            <button
+                              onClick={() => handleSaveEdit(donation._id)}
+                              style={{ backgroundColor: "#28a745", color: "#fff", padding: "6px 12px", border: "none", borderRadius: "4px" }}
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={handleCancelEdit}
+                              style={{ backgroundColor: "#6c757d", color: "#fff", padding: "6px 12px", border: "none", borderRadius: "4px" }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       ) : (
-                        <>
-                          <button onClick={() => handleEditClick(donation)}>Edit</button>
-                          <button onClick={() => handleDelete(donation._id)}>Delete</button>
-                        </>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <button
+                            onClick={() => handleEditClick(donation)}
+                            style={{ backgroundColor: "#ffc107", color: "#000", padding: "6px 10px", border: "none", borderRadius: "4px" }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(donation._id)}
+                            style={{ backgroundColor: "#dc3545", color: "#fff", padding: "6px 10px", border: "none", borderRadius: "4px" }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8">No donations found.</td>
+                  <td colSpan="8" style={{ textAlign: "center", padding: "20px", color: "#888" }}>
+                    No donations found.
+                  </td>
                 </tr>
               )}
             </tbody>

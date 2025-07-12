@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import CoNavbar from "./CoNavbar";
 
 function VictimRegistration() {
   const navigate = useNavigate();
-  const [camps, setCamps] = useState([]);
+
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -19,25 +18,46 @@ function VictimRegistration() {
     specialNeeds: "",
   });
 
+  const [campName, setCampName] = useState("");
   const [familyDetails, setFamilyDetails] = useState([]);
   const [message, setMessage] = useState("");
 
-  // Fetch camps from the backend
+  // On mount, get campId and fetch camp details
   useEffect(() => {
-    axios
-      .get("http://localhost:5553/api/campreg/getCamp")
-      .then((res) => setCamps(res.data))
-      .catch((err) => console.error("Error fetching camps:", err));
+    const campId = localStorage.getItem("campId");
+    if (campId) {
+      setFormData((prev) => ({ ...prev, campId }));
+      fetchCampName(campId);
+    } else {
+      console.error("campId missing in localStorage");
+    }
   }, []);
+
+  // Fetch camp info by ID
+  const fetchCampName = async (campId) => {
+    try {
+      const res = await fetch(`http://localhost:5553/api/camps/get/${campId}`); // Adjust URL to your API
+      if (!res.ok) throw new Error("Failed to fetch camp info");
+      const data = await res.json();
+      setCampName(data.name || "Unknown Camp");
+    } catch (error) {
+      console.error("Error fetching camp name:", error);
+      setCampName("Unknown Camp");
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    // When familyMembers count changes, update familyDetails array
     if (e.target.name === "familyMembers") {
       const count = Number(e.target.value);
       setFamilyDetails(
-        Array.from({ length: count }, () => ({ name: "", age: "", relationship: "", healthStatus: "Stable" }))
+        Array.from({ length: count }, () => ({
+          name: "",
+          age: "",
+          relationship: "",
+          healthStatus: "Stable",
+        }))
       );
     }
   };
@@ -68,7 +88,7 @@ function VictimRegistration() {
           gender: "Male",
           contact: "",
           address: "",
-          campId: "",
+          campId: formData.campId,
           healthStatus: "Stable",
           familyMembers: 0,
           specialNeeds: "",
@@ -93,21 +113,39 @@ function VictimRegistration() {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Age</Form.Label>
-                <Form.Control type="number" name="age" value={formData.age} onChange={handleChange} required />
+                <Form.Control
+                  type="number"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  required
+                />
               </Form.Group>
             </Col>
           </Row>
+
           <Row className="mt-3">
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Gender</Form.Label>
-                <Form.Select name="gender" value={formData.gender} onChange={handleChange} required>
+                <Form.Select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  required
+                >
                   <option>Male</option>
                   <option>Female</option>
                   <option>Other</option>
@@ -117,36 +155,48 @@ function VictimRegistration() {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Contact</Form.Label>
-                <Form.Control type="text" name="contact" value={formData.contact} onChange={handleChange} required />
+                <Form.Control
+                  type="text"
+                  name="contact"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  required
+                />
               </Form.Group>
             </Col>
           </Row>
+
           <Row className="mt-3">
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Address</Form.Label>
-                <Form.Control type="text" name="address" value={formData.address} onChange={handleChange} required />
+                <Form.Control
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Camp</Form.Label>
-                <Form.Select name="campId" value={formData.campId} onChange={handleChange} required>
-                  <option value="">Select Camp</option>
-                  {camps.map((camp) => (
-                    <option key={camp._id} value={camp._id}>
-                      {camp.name}
-                    </option>
-                  ))}
-                </Form.Select>
+                <Form.Label>Assigned Camp</Form.Label>
+                <Form.Control type="text" value={campName} disabled />
               </Form.Group>
             </Col>
           </Row>
+
           <Row className="mt-3">
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Health Status</Form.Label>
-                <Form.Select name="healthStatus" value={formData.healthStatus} onChange={handleChange} required>
+                <Form.Select
+                  name="healthStatus"
+                  value={formData.healthStatus}
+                  onChange={handleChange}
+                  required
+                >
                   <option>Stable</option>
                   <option>Injured</option>
                   <option>Critical</option>
@@ -156,7 +206,14 @@ function VictimRegistration() {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Family Members</Form.Label>
-                <Form.Control type="number" name="familyMembers" value={formData.familyMembers} onChange={handleChange} required />
+                <Form.Control
+                  type="number"
+                  name="familyMembers"
+                  value={formData.familyMembers}
+                  onChange={handleChange}
+                  required
+                  min={0}
+                />
               </Form.Group>
             </Col>
           </Row>
@@ -166,25 +223,50 @@ function VictimRegistration() {
               <Col md={3}>
                 <Form.Group>
                   <Form.Label>Family Member {index + 1} Name</Form.Label>
-                  <Form.Control type="text" onChange={(e) => handleFamilyChange(index, "name", e.target.value)} required />
+                  <Form.Control
+                    type="text"
+                    onChange={(e) =>
+                      handleFamilyChange(index, "name", e.target.value)
+                    }
+                    required
+                  />
                 </Form.Group>
               </Col>
               <Col md={2}>
                 <Form.Group>
                   <Form.Label>Age</Form.Label>
-                  <Form.Control type="number" onChange={(e) => handleFamilyChange(index, "age", e.target.value)} required />
+                  <Form.Control
+                    type="number"
+                    onChange={(e) =>
+                      handleFamilyChange(index, "age", e.target.value)
+                    }
+                    required
+                    min={0}
+                  />
                 </Form.Group>
               </Col>
               <Col md={3}>
                 <Form.Group>
                   <Form.Label>Relationship</Form.Label>
-                  <Form.Control type="text" onChange={(e) => handleFamilyChange(index, "relationship", e.target.value)} required />
+                  <Form.Control
+                    type="text"
+                    onChange={(e) =>
+                      handleFamilyChange(index, "relationship", e.target.value)
+                    }
+                    required
+                  />
                 </Form.Group>
               </Col>
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>Health Status</Form.Label>
-                  <Form.Select onChange={(e) => handleFamilyChange(index, "healthStatus", e.target.value)} required>
+                  <Form.Select
+                    onChange={(e) =>
+                      handleFamilyChange(index, "healthStatus", e.target.value)
+                    }
+                    required
+                    defaultValue="Stable"
+                  >
                     <option>Stable</option>
                     <option>Injured</option>
                     <option>Critical</option>
@@ -198,17 +280,28 @@ function VictimRegistration() {
             <Col md={12}>
               <Form.Group>
                 <Form.Label>Special Needs</Form.Label>
-                <Form.Control type="text" name="specialNeeds" value={formData.specialNeeds} onChange={handleChange} />
+                <Form.Control
+                  type="text"
+                  name="specialNeeds"
+                  value={formData.specialNeeds}
+                  onChange={handleChange}
+                />
               </Form.Group>
             </Col>
           </Row>
 
           <Row className="mt-3">
             <Col md={6}>
-              <Button type="submit" variant="primary" className="w-100">Register Victim</Button>
+              <Button type="submit" variant="primary" className="w-100">
+                Register Victim
+              </Button>
             </Col>
             <Col md={6}>
-              <Button variant="secondary" className="w-100" onClick={() => navigate("/victimlist")}>
+              <Button
+                variant="secondary"
+                className="w-100"
+                onClick={() => navigate("/victimlist")}
+              >
                 View Victims
               </Button>
             </Col>

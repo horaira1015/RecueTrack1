@@ -30,7 +30,9 @@ const DonationRoutes = require("./Routes/DonationRoutes");
 const incidentRoutes = require("./Routes/IncidentReportRoutes");
 const emailRoutes=require("./Routes/AlertRoutes")
 const ForgotPassRoutes = require("./Routes/ForgotPassRoutes"); // ✅
-
+// Routes
+const disasterRoutes = require("./Routes/DisasterRoutes");
+const leaderRoutes = require("./Routes/LeaderRoutes");
 
 const app = express();
 const port = process.env.PORT || 5553; // ✅ Use port from .env if available
@@ -75,7 +77,7 @@ connectDB();
 console.log("Registered Models:", mongoose.modelNames());
 
 // ✅ Routes
-app.use("/api/campreg", CampregRoutes);
+app.use("/api/camps", CampregRoutes);
 app.use("/api/auth", LoginRoutes);
 app.use("/api/cofficerReg", CofficerRegRoutes);
 app.use("/api/medicaloffReg", MofficerRegRoutes);
@@ -96,6 +98,9 @@ app.use("/api/incidents", incidentRoutes);
 app.use("/api/email",emailRoutes);
 app.use("/api/authe", ForgotPassRoutes); // ✅ Use Forgot Password Routes
 
+
+app.use("/api/disasters", disasterRoutes);
+app.use("/api/leaders", leaderRoutes);
 
 // ✅ Serve Uploaded Files
 app.use("/uploads", express.static(uploadDir));

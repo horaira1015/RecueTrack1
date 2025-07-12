@@ -54,6 +54,14 @@ import LocationManager from './components/LocationManager';
 import ForgotPassword from './components/ForgotPassword';
 import AdminLogin from './components/AdminLogin';
 import DonationSuccess from "./components/DonationSuccess"; // Adjust path if needed
+import LeaderRegister from './components/LeaderRegister';
+import LeaderLogin from './components/LeaderLogin';
+import CreateDisaster from './components/CreateDisaster';
+import ViewDisasters from './components/ViewDisasters';
+import LeaderDashboard from './components/LeaderDashboard';
+import CampDetails from './components/CampDetails'; // Assuming you have a CampDetails component
+import ViewLeaders from './components/viewLeaders';
+
 
 function App() {
   return (
@@ -100,8 +108,6 @@ function App() {
       <Route path="/requestsupplies" element={<RequestSupplies/>} />
       <Route path="/ireports" element={<IncidentReports/>} />
 
-
-
       <Route path="/medicalDashboard" element={<MedicalOfficerDashboard />} />
       <Route path='/MoNavbar' element={<MoNavbar/>}/>
       <Route path="/assignmofficer/:officerId" element={<AssignMOfficer/>}/>
@@ -130,7 +136,13 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
 
-      
+      <Route path="/LeaderRegistration" element={<LeaderRegister />} />
+      <Route path="/LeaderLogin" element={<LeaderLogin />} />
+      <Route path='/LeaderDashboard' element={<LeaderDashboard />} />
+      <Route path="/CreateDisaster" element={<CreateDisaster />} />
+      <Route path="/ViewDisasters" element={<ViewDisasters />} />
+      <Route path="/campsdetails/:campId" element={<CampDetails />} />
+      <Route path="/viewLeaders" element={<ViewLeaders />} />
     </Routes>
     
     

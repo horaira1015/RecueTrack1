@@ -5,51 +5,59 @@ const CampAid= require("../Models/CampRegModel");
 const victim = require("../Models/VictimModel")
 
 const assignCampOfficer = async (req, res) => {
-    try {
-        const { officerId } = req.params; // Extract from params
-        const { campId } = req.body; // Extract from body
+  try {
+    const { officerId } = req.params;
+    const { campId } = req.body;
 
-        console.log("Received officerId:", officerId);
-        console.log("Received campId:", campId);
+    console.log("Received officerId:", officerId);
+    console.log("Received campId:", campId);
 
-
-        if (!officerId || !campId) {
-            return res.status(400).json({ message: "Officer ID and Camp ID are required." });
-        }
-
-        // Check if officer exists
-        const officerExists = await CampOfficer.findById(officerId);
-        if (!officerExists) {
-            return res.status(404).json({ message: "Camp Officer not found." });
-        }
-
-
-        // Check if camp exists
-        const campExists = await CampAid.findById(campId);
-        if (!campExists) {
-            return res.status(404).json({ message: "Camp not found." });
-        }
-
-        // Check if assignment already exists
-        const existingAssignment = await AssignCampOfficer.findOne({ campOfficerId: officerId });
-        if (existingAssignment) {
-            return res.status(400).json({ message: "Officer is already assigned to a camp." });
-        }
-
-        const assignment = new AssignCampOfficer({
-            campOfficerId: officerId,
-            campId: campId,
-            assignDate: new Date()
-        });
-
-        await assignment.save();
-        res.status(200).json({ message: "Camp officer assigned successfully!" });
-
-    } catch (error) {
-        console.error("Error while assigning officer:", error);
-        res.status(500).json({ message: "Server error while assigning officer.", error });
+    if (!officerId || !campId) {
+      return res.status(400).json({ message: "Officer ID and Camp ID are required." });
     }
+
+    // Check if officer exists
+    const officerExists = await CampOfficer.findById(officerId);
+    if (!officerExists) {
+      return res.status(404).json({ message: "Camp Officer not found." });
+    }
+
+    // Check if camp exists
+    const campExists = await CampAid.findById(campId);
+    if (!campExists) {
+      return res.status(404).json({ message: "Camp not found." });
+    }
+
+    // Check if already assigned
+    const existingAssignment = await AssignCampOfficer.findOne({ campOfficerId: officerId });
+    if (existingAssignment) {
+      return res.status(400).json({ message: "Officer is already assigned to a camp." });
+    }
+
+    // Create new assignment
+    const assignment = new AssignCampOfficer({
+      campOfficerId: officerId,
+      campId,
+      assignDate: new Date()
+    });
+
+    await assignment.save();
+
+   await CampAid.findByIdAndUpdate(
+  campId,
+  { $addToSet: { campOfficer: officerId } },
+  { new: true }
+);
+
+
+    res.status(200).json({ message: "Camp officer assigned and camp updated successfully!" });
+
+  } catch (error) {
+    console.error("Error while assigning officer:", error);
+    res.status(500).json({ message: "Server error while assigning officer.", error });
+  }
 };
+
 
 
 const getAssignedCampForOfficer = async (req, res) => {

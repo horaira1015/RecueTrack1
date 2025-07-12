@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
+const Leader = require("../Models/Leader");
 
 // Load environment variables
 require("dotenv").config();
@@ -57,6 +58,10 @@ exports.registerCampOfficer = async (req, res) => {
             const existingOfficer2 = await MedicalOfficer.findOne({ email });
             if (existingOfficer2) {
                 return res.status(400).json({ message: "Medical Officer already registered!" });
+            }
+            const existingOfficer3 = await Leader.findOne({ email });
+            if (existingOfficer3) {
+                return res.status(400).json({ message: "Leader already registered!" });
             }
 
             // Hash password before saving

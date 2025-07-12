@@ -24,7 +24,7 @@ function CategoryRegistration() {
       .catch((err) => console.error("Error fetching categories:", err));
 
     axios
-      .get("http://localhost:5553/api/campreg/getCamp")
+      .get("http://localhost:5553/api/camps/getCamp")
       .then((res) => setCamps(res.data))
       .catch((err) => console.error("Error fetching camps:", err));
   }, []);

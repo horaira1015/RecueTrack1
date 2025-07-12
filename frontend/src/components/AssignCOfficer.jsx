@@ -15,7 +15,7 @@ function AssignCOfficer() {
   useEffect(() => {
     const fetchCamps = async () => {
       try {
-        const response = await axios.get("http://localhost:5553/api/campreg/getCamp");
+        const response = await axios.get("http://localhost:5553/api/camps/cr");
         setCamps(response.data);
       } catch {
         setError("Failed to fetch camps. Try again later.");

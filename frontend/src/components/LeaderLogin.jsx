@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
-function Login() {
+function LeaderLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,24 +21,25 @@ function Login() {
       return;
     }
 
-    // Admin login bypass
-    // if (email === "admin@gmail.com" && password === "admin123") {
-    //   alert("Welcome, Admin!");
-    //   navigate('/AdminDashboard');
-    //   setIsLoading(false);
-    //   return;
-    // }
-
     try {
-      // Try logging in as Medical Officer
-      const res = await axios.post("http://localhost:5553/api/auth/medicalofficer", { email, password });
-      console.log("Medical Officer Logged In:", res.data);
-      localStorage.setItem("MOfficerId", res.data.MOfficerId);
-      localStorage.setItem("campId", res.data.campId);
-      navigate("/medicalDashboard");
+      const res = await axios.post("http://localhost:5553/api/auth/leader", 
+        { email, password },
+        { withCredentials: true }
+      );
+
+      console.log("Full API Response:", res.data);
+
+      if (res.data.success && res.data.leaderId) {
+        console.log("✅ leaderId received:", res.data.leaderId);
+        localStorage.setItem("leaderId", res.data.leaderId);
+        navigate("/LeaderDashboard");
+      } else {
+        console.error("❌ Login failed, response:", res.data);
+        setErrorMessage(res.data.message || "Invalid login credentials. Please try again.");
+      }
     } catch (error) {
       console.error("Login error:", error);
-      setErrorMessage("Invalid email or password. Please try again.");
+      setErrorMessage("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -53,9 +54,9 @@ function Login() {
         style={styles.loginCard}
       >
         <div style={styles.header}>
-          <div style={styles.logo}>🏥</div>
-          <h2 style={styles.title}>Medical Officer Login</h2>
-          <p style={styles.subtitle}>Access your medical dashboard</p>
+          <div style={styles.logo}>🧭</div>
+          <h2 style={styles.title}>Leader Login</h2>
+          <p style={styles.subtitle}>Access your disaster management dashboard</p>
         </div>
 
         {errorMessage && (
@@ -125,13 +126,9 @@ function Login() {
         </form>
 
         <div style={styles.links}>
-          <Link to="/forgot-password" style={styles.link}>
-            Forgot password?
-          </Link>
+          <Link to="/Login" style={styles.link}>Medical Officer Login</Link>
           <span style={styles.divider}>•</span>
-          <Link to="/clogin" style={styles.link}>
-            Camp Officer Login
-          </Link>
+          <Link to="/forgot-password" style={styles.link}>Forgot Password?</Link>
         </div>
 
         <div style={styles.otherLogins}>
@@ -169,17 +166,44 @@ function Login() {
 }
 
 const styles = {
+  otherLogins: { textAlign: 'center' },
+  otherButtons: { display: 'flex', gap: '12px' },
+  otherLoginsText: { color: '#718096', fontSize: '14px', marginBottom: '12px' },
+  adminButton: {
+    flex: 1,
+    padding: '12px',
+    fontSize: '14px',
+    fontWeight: '600',
+    backgroundColor: '#667eea',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
+  },
+  volunteerButton: {
+    flex: 1,
+    padding: '12px',
+    fontSize: '14px',
+    fontWeight: '600',
+    backgroundColor: '#f6ad55',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
+  },
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+    background: 'linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)',
     padding: '20px',
   },
   loginCard: {
     width: '100%',
-    maxWidth: '420px',
+    maxWidth: '450px',
     background: '#ffffff',
     borderRadius: '12px',
     padding: '40px',
@@ -195,7 +219,7 @@ const styles = {
   },
   title: {
     fontSize: '24px',
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#2d3748',
     marginBottom: '8px',
   },
@@ -212,31 +236,21 @@ const styles = {
     fontSize: '14px',
     textAlign: 'center',
   },
-  form: {
-    marginBottom: '20px',
-  },
-  formGroup: {
-    marginBottom: '20px',
-  },
+  form: { marginBottom: '20px' },
+  formGroup: { marginBottom: '20px' },
   label: {
     display: 'block',
     fontSize: '14px',
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#4a5568',
     marginBottom: '8px',
   },
   input: {
     width: '100%',
-    padding: '12px 16px',
+    padding: '14px 16px',
     fontSize: '14px',
     border: '1px solid #e2e8f0',
     borderRadius: '8px',
-    transition: 'all 0.3s',
-    ':focus': {
-      borderColor: '#4299e1',
-      boxShadow: '0 0 0 3px rgba(66, 153, 225, 0.2)',
-      outline: 'none',
-    },
   },
   loginButton: {
     width: '100%',
@@ -252,11 +266,6 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    transition: 'all 0.3s',
-    ':disabled': {
-      backgroundColor: '#a0aec0',
-      cursor: 'not-allowed',
-    },
   },
   spinner: {
     animation: 'spin 1s linear infinite',
@@ -266,59 +275,17 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     gap: '12px',
-    marginBottom: '30px',
   },
   link: {
     color: '#4299e1',
     fontSize: '14px',
     fontWeight: '500',
     textDecoration: 'none',
-    transition: 'all 0.3s',
-    ':hover': {
-      color: '#3182ce',
-      textDecoration: 'underline',
-    },
   },
   divider: {
     color: '#cbd5e0',
     fontSize: '14px',
   },
-  otherLogins: {
-    textAlign: 'center',
-  },
-  otherLoginsText: {
-    color: '#718096',
-    fontSize: '14px',
-    marginBottom: '12px',
-  },
-  otherButtons: {
-    display: 'flex',
-    gap: '12px',
-  },
-  volunteerButton: {
-    flex: 1,
-    padding: '12px',
-    fontSize: '14px',
-    fontWeight: '600',
-    backgroundColor: '#f6ad55',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.3s',
-  },
-  adminButton: {
-    flex: 1,
-    padding: '12px',
-    fontSize: '14px',
-    fontWeight: '600',
-    backgroundColor: '#667eea',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.3s',
-  },
 };
 
-export default Login;
+export default LeaderLogin;

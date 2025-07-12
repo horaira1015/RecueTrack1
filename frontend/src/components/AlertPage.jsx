@@ -11,7 +11,7 @@ const AdminEmailPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5553/api/campreg/getCamp")
+      .get("http://localhost:5553/api/camps/getCamp")
       .then((res) => setCamps(res.data))
       .catch((err) => console.error(err));
   }, []);

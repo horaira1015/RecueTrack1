@@ -5,56 +5,59 @@ const CampAid = require("../Models/CampRegModel");
 const victim = require("../Models/VictimModel")
 
 const assignMedicalOfficer = async (req, res) => {
-    try {
-        const { MOfficerId, campId } = req.body;
-        console.log("Received MOfficerId:", MOfficerId);  // Debugging log
-        console.log("Received campId:", campId);
+  try {
+    const { officerId } = req.params;
+    const { campId } = req.body;
 
-        if (!MOfficerId) {
-            return res.status(400).json({ error: "MOfficerId is missing in request" });
-        }
+    console.log("Received MOfficerId:", officerId);
+    console.log("Received campId:", campId);
 
-
-        if (!campId) {
-            return res.status(400).json({ error: "Camp ID is missing in request" });
-        }
-
-        // Check if officer exists
-        const officerExists = await MedicalOfficer.findById(MOfficerId);
-        if (!officerExists) {
-            return res.status(404).json({ message: "Medical Officer not found." });
-        }
-
-        // Check if camp exists
-        const campExists = await CampAid.findById(campId);
-        if (!campExists) {
-            return res.status(404).json({ message: "Camp not found." });
-        }
-
-        // Check if assignment already exists
-        const existingAssignment = await AssignMedicalOfficer.findOne({MOfficerId: MOfficerId});
-        console.log(MOfficerId)
-        if (existingAssignment) {
-            console.log(existingAssignment)
-            return res.status(400).json({ message: "Officer is already assigned to a camp." });
-        }
-        console.log(existingAssignment + "--------")
-
-        const newAssignment = new AssignMedicalOfficer({
-            MOfficerId,
-            campId,
-            assignDate: new Date() // Ensure assignDate is set
-        });
-
-
-        await newAssignment.save();
-        res.status(201).json({ message: "Medical officer assigned successfully." });
-
-    } catch (error) {
-        console.error("Error while assigning officer:", error);
-        res.status(500).json({ error: "Internal server error" });
+    if (!officerId || !campId) {
+      return res.status(400).json({ error: "Missing officerId or campId" });
     }
+
+    // Check if officer and camp exist
+    const officerExists = await MedicalOfficer.findById(officerId);
+    if (!officerExists) {
+      return res.status(404).json({ message: "Medical Officer not found." });
+    }
+
+    const campExists = await CampAid.findById(campId);
+    if (!campExists) {
+      return res.status(404).json({ message: "Camp not found." });
+    }
+
+    // Check for existing assignment
+    const existingAssignment = await AssignMedicalOfficer.findOne({ MOfficerId: officerId });
+    if (existingAssignment) {
+      return res.status(400).json({ message: "Officer is already assigned to a camp." });
+    }
+
+    // 1️⃣ Save assignment in separate assignment collection
+    const newAssignment = new AssignMedicalOfficer({
+      MOfficerId: officerId,
+      campId,
+      assignDate: new Date()
+    });
+    await newAssignment.save();
+
+    // 2️⃣ Update the camp's reference to this medical officer
+    await CampAid.findByIdAndUpdate(
+  campId,
+  { $addToSet: { medicalOfficer: officerId } }, // ✅ Add without duplicates
+  { new: true }
+);
+
+
+    res.status(201).json({ message: "Medical officer assigned and camp updated successfully." });
+
+  } catch (error) {
+    console.error("Error while assigning officer:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
+
+
 
 
 const getAssignedMedicalForOfficer = async (req, res) => {

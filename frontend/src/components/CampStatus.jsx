@@ -15,24 +15,25 @@ function CampStatus() {
   }, []);
 
   const fetchCampStatuses = async () => {
-    if (!campId) {
-      console.error("Error: campId is missing");
-      return;
+  if (!campId) {
+    console.error("Error: campId is missing");
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:5553/api/campstatus/get/${campId}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to fetch camp statuses");
     }
-  
-    try {
-      const res = await fetch(`http://localhost:5553/api/campstatus/get/${campId}`);
-      const data = await res.json();
-  
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch camp statuses");
-      }
-  
-      setCampStatuses(data);
-    } catch (error) {
-      console.error("Error fetching camp statuses:", error);
-    }
-  };
+
+    setCampStatuses(data.statuses); // ✅ FIXED HERE
+  } catch (error) {
+    console.error("Error fetching camp statuses:", error);
+  }
+};
+
   
 
   const handleSubmit = async (e) => {

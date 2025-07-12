@@ -1,13 +1,22 @@
-const express=require("express")
-const router=express.Router()
-const {createCamp,getCamp}=require("../Controllers/CampRegController")
+const express = require("express");
+const router = express.Router();
+const {
+  createCamp,
+  getCamp,
+  getCampsByDisasterId, 
+  getCampById
+} = require("../Controllers/CampRegController");
 
-// router.post('/createCamp',CampRegController.createCamp)
+// POST /api/camps/cr
+router.post("/cr", createCamp);
 
-// Route to register a new camp
-router.post("/createCamp", createCamp);
+// GET /api/camps/cr
+router.get("/cr", getCamp);
 
-// Route to get all camps
-router.get("/getCamp", getCamp);
+// GET /api/camps/disaster/:disasterId
+router.get("/disaster/:disasterId", getCampsByDisasterId);
 
-module.exports=router;
+// GET /api/camps/get/:campId
+router.get("/get/:campId", getCampById);
+
+module.exports = router;

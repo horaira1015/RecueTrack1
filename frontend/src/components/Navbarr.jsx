@@ -24,6 +24,8 @@ function Navbarr() {
               <NavDropdown.Item as={Link} to ="/CampRegistration" style={dropdownItemStyle}>Camp</NavDropdown.Item>
               <NavDropdown.Item as={Link} to ="/CampOfficerRegistration" style={dropdownItemStyle}>Camp Officer</NavDropdown.Item>
               <NavDropdown.Item as={Link} to ="/MedicalOfficerRegistration" style={dropdownItemStyle}>Medical Officer</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to ="/LeaderRegistration" style={dropdownItemStyle}>Leader</NavDropdown.Item>
+
             </NavDropdown>
 
            {/* Inventory Management as a Main Dropdown */}

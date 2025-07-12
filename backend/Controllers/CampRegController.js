@@ -1,53 +1,87 @@
-const CampAid = require("../Models/CampRegModel");
+const Camp = require("../Models/CampRegModel");
 
+// Create new camp under a disaster
 const createCamp = async (req, res) => {
   try {
-    const { name, address, district, place, pincode, totalCapacity } = req.body;
+    const { name, place, district, totalCapacity, disaster } = req.body;
 
+    if (!name || !place || !district || !totalCapacity || !disaster) {
+      console.error("Missing required fields:", req.body);
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
-    // Check if a camp with the same details already exists
-    const existingCamp = await CampAid.findOne({ name, address, district, place, pincode });
-
-    if (existingCamp) {
+    const existing = await Camp.findOne({ name, place, district, disaster });
+    if (existing) {
       return res.status(409).json({ error: "Camp with these details already exists." });
     }
 
-    // Create a new camp record
-    const newCamp = await CampAid.create({ name, address, district, place, pincode, totalCapacity, status: "Inactive" });
-    res.status(201).json({ message: "Camp registered successfully!", camp: newCamp });
+    const newCamp = await Camp.create({
+      name,
+      place,
+      district,
+      totalCapacity,
+      disaster,
+      status: "Inactive",
+    });
+
+    res.status(201).json({ message: "Camp created successfully", camp: newCamp });
   } catch (error) {
-    res.status(500).json({ success: false, msg: "An error occurred" });
+    console.error("Create Camp Error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
+// Get all camps with virtuals
 const getCamp = async (req, res) => {
   try {
+    const camps = await Camp.find().populate("campOfficer").populate("medicalOfficer");
+    const withVirtuals = camps.map((camp) => camp.toObject({ virtuals: true }));
+    res.status(200).json(withVirtuals);
+  } catch (error) {
+    console.error("Fetch Camp Error:", error);
+    res.status(500).json({ error: "Error fetching camps" });
+  }
+};
 
-    const testCamp = await CampAid.findOne();
-    
-    if (testCamp) {
-      console.log("Test Camp with Virtuals:", testCamp.toObject({ virtuals: true }));
-    } else {
-      console.log("No camp found in the database.");
+// Get a specific camp by ID (with populated officers and virtuals)
+const getCampById = async (req, res) => {
+  try {
+    const { campId } = req.params;
+
+    if (!campId) {
+      return res.status(400).json({ error: "Camp ID is required" });
     }
 
-    const camps = await CampAid.find(); // Don't use .lean()
-    
-    // Convert each camp to an object to ensure virtuals are included
-    const updatedCamps = camps.map(camp => camp.toObject({ virtuals: true }));
+    const camp = await Camp.findById(campId)
+      .populate("campOfficer", "name position")
+      .populate("medicalOfficer", "name position");
 
-    console.log("Fetched Camp Data:", updatedCamps[0]); // ✅ Check if virtuals are present
-    res.status(200).json(updatedCamps);
+    if (!camp) {
+      return res.status(404).json({ error: "Camp not found" });
+    }
+
+    res.status(200).json(camp.toObject({ virtuals: true }));
   } catch (error) {
-    res.status(500).json({ message: "Error fetching camps", error });
+    console.error("Error fetching camp by ID:", error);
+    res.status(500).json({ error: "Failed to fetch camp", details: error.message });
   }
 };
 
 
+// Get camps by disaster ID (used by leader dashboard)
+const getCampsByDisasterId = async (req, res) => {
+  try {
+    const { disasterId } = req.params;
+    const camps = await Camp.find({ disaster: disasterId })
+      .populate("campOfficer")
+      .populate("medicalOfficer");
 
+    const withVirtuals = camps.map((camp) => camp.toObject({ virtuals: true }));
+    res.status(200).json(withVirtuals);
+  } catch (error) {
+    console.error("Fetch by Disaster Error:", error);
+    res.status(500).json({ error: "Failed to fetch camps" });
+  }
+};
 
-
-
-
-
-module.exports = { createCamp, getCamp };
+module.exports = { createCamp, getCamp, getCampsByDisasterId, getCampById };

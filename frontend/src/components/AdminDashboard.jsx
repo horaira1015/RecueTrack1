@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Navbarr from "./Navbarr";
 import axios from "axios";
@@ -67,102 +67,109 @@ function AdminDashboard() {
     <>
       <Navbarr />
       <Container className="mt-5">
-        <h2 className="text-center mb-4">Admin Dashboard</h2>
+        <h2 className="text-center mb-5 fw-bold">📊 Admin Dashboard</h2>
 
         <Row className="g-4 mb-4">
           <Col md={4}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/alerts")}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/alerts")}>
               <Card.Body>
-                <FaClipboardList size={32} className="text-danger mb-2" />
-                <Card.Title>Send Alerts</Card.Title>
-                <Card.Text className="fs-5 fw-bold">Disasters / Stock Out</Card.Text>
+                <FaClipboardList size={32} className="text-danger mb-3" />
+                <h5 className="fw-bold">Send Alerts</h5>
+                <p className="text-muted mb-0">Disasters / Stock Out</p>
               </Card.Body>
             </Card>
           </Col>
 
-          <Col md={3}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/CampSummary")}>
-              <Card.Body>
-                <FaCampground size={32} className="text-primary mb-2" />
-                <Card.Title>Total Camps</Card.Title>
-                <Card.Text className="fs-4 fw-bold">{totalCamps}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={3}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/ApprovedVolunteers")}>
-              <Card.Body>
-                <FaUsers size={32} className="text-success mb-2" />
-                <Card.Title>Registered Volunteers</Card.Title>
-                <Card.Text className="fs-4 fw-bold">{approvedVolunteers}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
           <Col md={4}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/ManageCamps")}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/ManageCamps")}>
               <Card.Body>
-                <FaCampground size={32} className="text-primary mb-2" />
-                <Card.Title>Manage Camps</Card.Title>
-                <Card.Text className="fs-4 fw-bold">{totalCamps}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/Viewdonation")}>
-              <Card.Body>
-                <FaDonate size={32} className="text-warning mb-2" />
-                <Card.Title>Donations Received</Card.Title>
-                <Card.Text className="fs-5 fw-bold">{totalDonations.toLocaleString()}</Card.Text>
-                <Card.Text className="text-muted">Remaining: {remainingBalance.toLocaleString()}</Card.Text>
+                <FaCampground size={32} className="text-primary mb-3" />
+                <h5 className="fw-bold">Manage Camps</h5>
+                <p className="fs-5 text-dark fw-semibold">{totalCamps ?? "—"}</p>
               </Card.Body>
             </Card>
           </Col>
 
-          <Col md={3}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/Requests")}>
+          <Col md={4}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/ApprovedVolunteers")}>
               <Card.Body>
-                <FaClipboardList size={32} className="text-danger mb-2" />
-                <Card.Title>Active Requests</Card.Title>
-                <Card.Text className="fs-4 fw-bold">{totalRequests}</Card.Text>
+                <FaUsers size={32} className="text-success mb-3" />
+                <h5 className="fw-bold">Volunteers</h5>
+                <p className="fs-5 text-dark fw-semibold">{approvedVolunteers}</p>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md={4}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/Viewdonation")}>
+              <Card.Body>
+                <FaDonate size={32} className="text-warning mb-3" />
+                <h5 className="fw-bold">Donations</h5>
+                <p className="mb-1 text-success fw-semibold">{totalDonations.toLocaleString()}</p>
+                <small className="text-muted">Remaining: {remainingBalance.toLocaleString()}</small>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md={4}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/Requests")}>
+              <Card.Body>
+                <FaClipboardList size={32} className="text-danger mb-3" />
+                <h5 className="fw-bold">Pending Requests</h5>
+                <p className="fs-5 text-dark fw-semibold">{totalRequests}</p>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md={4}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/CampSummary")}>
+              <Card.Body>
+                <FaCampground size={32} className="text-info mb-3" />
+                <h5 className="fw-bold">Camp Summary</h5>
               </Card.Body>
             </Card>
           </Col>
         </Row>
 
         <Row className="g-4">
-          
-
           <Col md={4}>
-            <Card className="dashboard-card text-center">
+            <Card className="dashboard-card glass text-center">
               <Card.Body>
-                <FaClipboardList size={32} className="text-info mb-2" />
-                <Card.Title className="mb-3">Camp Reports</Card.Title>
-                <div className="d-flex flex-column gap-2">
-                  <button className="btn btn-primary" onClick={() => navigate("/campreports")}>📝 Daily Camp Reports</button>
-                  <button className="btn btn-danger" onClick={() => navigate("/adminincidents")}>🚨 Incident Reports</button>
-                  <button className="btn btn-secondary" onClick={() => navigate("/victims")}>👤 View Victim Details</button>
+                <FaClipboardList size={32} className="text-info mb-3" />
+                <h5 className="fw-bold">Camp Reports</h5>
+                <div className="d-flex flex-column gap-2 mt-3">
+                  <Button variant="primary" onClick={() => navigate("/campreports")}>📝 Daily Reports</Button>
+                  <Button variant="danger" onClick={() => navigate("/adminincidents")}>🚨 Incidents</Button>
+                  <Button variant="secondary" onClick={() => navigate("/victims")}>👤 Victim Details</Button>
                 </div>
               </Card.Body>
             </Card>
           </Col>
 
           <Col md={4}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/Requests")}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/CreateDisaster")}>
               <Card.Body>
-                <FaListAlt size={32} className="text-success mb-2" />
-                <Card.Title>View Requests</Card.Title>
-                <Card.Text className="fs-5 fw-bold">Monitor & Respond</Card.Text>
+                <FaClipboardList size={32} className="text-info mb-3" />
+                <h5 className="fw-bold">Create Disaster</h5>
               </Card.Body>
             </Card>
           </Col>
 
           <Col md={4}>
-            <Card className="dashboard-card text-center" onClick={() => navigate("/viewItems")}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/ViewDisasters")}>
               <Card.Body>
-                <FaWarehouse size={32} className="text-warning mb-2" />
-                <Card.Title>Manage Inventory</Card.Title>
-                <Card.Text className="fs-5 fw-bold">Track & Distribute</Card.Text>
+                <FaClipboardList size={32} className="text-info mb-3" />
+                <h5 className="fw-bold">View Disasters</h5>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md={4}>
+            <Card className="dashboard-card glass" onClick={() => navigate("/viewItems")}>
+              <Card.Body>
+                <FaWarehouse size={32} className="text-warning mb-3" />
+                <h5 className="fw-bold">Manage Inventory</h5>
+                <p className="text-muted">Track & Distribute</p>
               </Card.Body>
             </Card>
           </Col>
@@ -172,13 +179,20 @@ function AdminDashboard() {
       <style>{`
         .dashboard-card {
           cursor: pointer;
-          border-radius: 15px;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          border-radius: 20px;
+          transition: all 0.3s ease;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
+
         .dashboard-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+        .glass {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.4);
         }
       `}</style>
     </>
