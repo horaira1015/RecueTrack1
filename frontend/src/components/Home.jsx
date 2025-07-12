@@ -527,22 +527,27 @@ const styles = {
     boxShadow: "0 15px 30px rgba(0, 0, 0, 0.1)",
     height: "400px",
   },
-  aboutImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover",
-  },
-  aboutImageOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "linear-gradient(to right, rgba(10, 38, 71, 0.7), rgba(20, 66, 114, 0.5))",
-  },
+ aboutImage: {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: "url('https://tfe-bd.sgp1.cdn.digitaloceanspaces.com/uploads/1603722306.jpg?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover",
+  filter: "brightness(1.2) contrast(1.1)", // brighten and enhance contrast
+  zIndex: 1,
+},
+
+aboutImageOverlay: {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: "linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(10, 38, 71, 0.5))", // lighter overlay
+  zIndex: 2,
+},
+
   contactSection: {
     padding: "6rem 0",
     background: "#FFFFFF",
